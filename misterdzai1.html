@@ -4,69 +4,95 @@
 <meta charset="UTF-8">
 <title>MisterDZAI 1</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
-body {
-  margin: 0;
-  background: #000;
-  color: #00ff66;
-  font-family: monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:#000;
+  color:#00ff66;
+  font-family:'Share Tech Mono', monospace;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
-
-.box {
-  width: 850px;
-  border: 2px solid #00ff66;
-  padding: 20px;
-  box-shadow: 0 0 25px #00ff66;
+.hacker-box{
+  width:850px;
+  background:#050505;
+  border:2px solid #00ff66;
+  box-shadow:0 0 30px #00ff66;
+  padding:20px;
 }
-
-textarea {
-  width: 100%;
-  height: 300px;
-  background: #000;
-  color: #00ff66;
-  border: 1px solid #00ff66;
-  padding: 10px;
+.logo pre{text-align:center;font-size:14px;margin:0;}
+#typing{height:22px;color:#00cc55;margin:10px 0;}
+textarea{
+  width:100%;height:280px;background:#000;color:#00ff66;
+  border:1px solid #00ff66;padding:10px;
 }
-
-.buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+.buttons{display:flex;gap:10px;margin-top:10px;}
+button{
+  flex:1;padding:12px;background:#00ff66;color:#000;
+  border:none;font-weight:bold;cursor:pointer;
 }
-
-button {
-  flex: 1;
-  padding: 10px;
-  font-weight: bold;
-  background: #00ff66;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #00cc55;
-}
+button:hover{background:#00cc55;}
+.footer{text-align:center;font-size:12px;color:#007733;margin-top:8px;}
 </style>
 </head>
 
 <body>
+<div class="hacker-box">
 
-<div class="box">
-  <h3>MisterDZAI Page 1</h3>
+<pre class="logo">
+███╗   ███╗██╗███████╗████████╗███████╗██████╗ 
+████╗ ████║██║██╔════╝╚══██╔══╝██╔════╝██╔══██╗
+██╔████╔██║██║███████╗   ██║   █████╗  ██████╔╝
+██║╚██╔╝██║██║╚════██║   ██║   ██╔══╝  ██╔══██╗
+██║ ╚═╝ ██║██║███████║   ██║   ███████╗██║  ██║
+╚═╝     ╚═╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+          M I S T E R  D Z A I
+</pre>
 
-  <!-- 🔽 ضع المحتوى هنا -->
-  <textarea>
-ضع المحتوى الخاص بـ misterdzai1 هنا
-  </textarea>
+<div id="typing"></div>
 
-  <div class="buttons">
-    <button onclick="location.href='index.html'">⬅️ رجوع للرئيسية</button>
-  </div>
+<textarea id="dataBox">
+ضع محتوى misterdzai1 هنا
+</textarea>
+
+<div class="buttons">
+  <button onclick="copySelected()">☠️ COPY</button>
+  <button onclick="exportTXT()">📄 TXT</button>
+  <button onclick="exportPDF()">📕 PDF</button>
+  <button onclick="location.href='index.html'">⬅️ رجوع</button>
 </div>
+
+<div class="footer">© MisterDZAI | Page 1</div>
+</div>
+
+<script>
+const msg=">> System Ready | Page 1";
+let i=0;(function t(){if(i<msg.length){typing.innerHTML+=msg[i++];setTimeout(t,40)}})();
+
+function copySelected(){
+ const ta=dataBox;
+ const s=ta.value.substring(ta.selectionStart,ta.selectionEnd)||ta.value;
+ navigator.clipboard.writeText(s);
+}
+function exportTXT(){
+ const t=dataBox.value.trim(); if(!t)return;
+ const b=new Blob([t],{type:"text/plain"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(b); a.download="MisterDZAI1.txt"; a.click();
+}
+function exportPDF(){
+ const {jsPDF}=window.jspdf;
+ const d=new jsPDF(); d.setFont("courier"); d.setFontSize(10);
+ d.text(d.splitTextToSize(dataBox.value,180),10,10);
+ d.save("MisterDZAI1.pdf");
+}
+</script>
 
 </body>
 </html>
