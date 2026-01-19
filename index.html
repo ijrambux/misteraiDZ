@@ -31,14 +31,9 @@ body {
   padding: 20px;
 }
 
-.logo {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
 .logo pre {
+  text-align: center;
   font-size: 14px;
-  line-height: 1.2;
   margin: 0;
 }
 
@@ -97,8 +92,7 @@ button:hover {
 
 <div class="hacker-box">
 
-  <div class="logo">
-<pre>
+<pre class="logo">
 ███╗   ███╗██╗███████╗████████╗███████╗██████╗ 
 ████╗ ████║██║██╔════╝╚══██╔══╝██╔════╝██╔══██╗
 ██╔████╔██║██║███████╗   ██║   █████╗  ██████╔╝
@@ -107,12 +101,12 @@ button:hover {
 ╚═╝     ╚═╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
           M I S T E R  D Z A I
 </pre>
-  </div>
 
-  <div id="typing"></div>
+<div id="typing"></div>
 
-  <!-- 👇👇 هنا تضع المحتوى أو تلصقه مباشرة -->
-  <textarea id="dataBox" placeholder=">> MA🇲🇦
+<!-- 🔽🔽 هنا تضع المحتوى (اكتب أو الصق) 🔽🔽 -->
+<textarea id="dataBox">
+MA🇲🇦
 
 URL: https://nordaccount.com/login/password
 Username: UNKNOWN
@@ -21681,62 +21675,71 @@ Login: rachidouhira6@gmail.com
 Password: rachid 2005
 ------------------------------------------
 
-"></textarea>
 
-  <div class="buttons">
-    <button onclick="copyData()">☠️ COPY</button>
-    <button onclick="exportTXT()">📄 TXT</button>
-    <button onclick="exportPDF()">📕 PDF</button>
-  </div>
+</textarea>
 
-  <div class="footer">© MisterDZAI | Hacker Interface</div>
+<div class="buttons">
+  <button onclick="copySelected()">☠️ COPY</button>
+  <button onclick="exportTXT()">📄 TXT</button>
+  <button onclick="exportPDF()">📕 PDF</button>
 </div>
 
-<!-- صوت هاكر -->
+<div class="footer">© MisterDZAI | Hacker Interface</div>
+
+</div>
+
+<!-- صوت -->
 <audio id="hackSound">
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-changing-tab-206.wav" type="audio/wav">
 </audio>
 
 <script>
-// ===== Typing Effect =====
-const typingText = ">> System Ready | Secure Channel Open | Waiting for Input...";
+// Typing Effect
+const msg = ">> System Ready | Select text to copy or export...";
 let idx = 0;
-function typingEffect() {
-  if (idx < typingText.length) {
-    document.getElementById("typing").innerHTML += typingText.charAt(idx++);
-    setTimeout(typingEffect, 40);
+(function typing(){
+  if (idx < msg.length) {
+    document.getElementById("typing").innerHTML += msg.charAt(idx++);
+    setTimeout(typing, 40);
   }
-}
-typingEffect();
+})();
 
-// ===== Copy + Sound =====
-function copyData() {
-  const t = document.getElementById("dataBox");
-  t.select();
-  document.execCommand("copy");
+// COPY: ينسخ المحدد فقط أو الكل
+function copySelected() {
+  const ta = document.getElementById("dataBox");
+  const selected = ta.value.substring(ta.selectionStart, ta.selectionEnd);
+  const textToCopy = selected || ta.value;
+
+  navigator.clipboard.writeText(textToCopy);
   document.getElementById("hackSound").play();
-  document.getElementById("typing").innerHTML = ">> DATA COPIED SUCCESSFULLY ✔";
+  document.getElementById("typing").innerHTML = ">> DATA COPIED ✔";
 }
 
-// ===== Export TXT =====
+// TXT Export (غير فارغ)
 function exportTXT() {
-  const text = document.getElementById("dataBox").value;
-  const blob = new Blob([text], { type: "text/plain" });
+  const text = document.getElementById("dataBox").value.trim();
+  if (!text) return alert("المحتوى فارغ");
+
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "MisterDZAI.txt";
   a.click();
 }
 
-// ===== Export PDF =====
+// PDF Export (غير فارغ)
 function exportPDF() {
+  const content = document.getElementById("dataBox").value.trim();
+  if (!content) return alert("المحتوى فارغ");
+
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const text = document.getElementById("dataBox").value || " ";
-  doc.setFont("courier");
-  doc.setFontSize(10);
-  doc.text(text, 10, 10, { maxWidth: 190 });
-  doc.save("MisterDZAI.pdf");
+  const pdf = new jsPDF({ unit: "mm", format: "a4" });
+  pdf.setFont("courier");
+  pdf.setFontSize(10);
+
+  const lines = pdf.splitTextToSize(content, 180);
+  pdf.text(lines, 10, 10);
+  pdf.save("MisterDZAI.pdf");
 }
 </script>
 
